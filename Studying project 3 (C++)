@@ -1,0 +1,361 @@
+#include <string.h>
+#include <stdio.h>
+#include <conio.h>
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+
+#define null 0
+
+using std::cout;
+using std::cin;
+using std::endl;
+using std::ostream;
+using std::ofstream;
+
+class Data {
+protected:
+	int year, month, day;
+public:
+	Data () {
+    year=2000;
+	month=1;
+	day=1;
+}
+    Data (int yr, int mth, int dy) {
+    year=yr;
+	month=mth;
+	day=dy;
+}
+	int get_year () {return year; }
+	int get_month () {return month; }
+	int get_day () {return day; }
+};
+class Book: public Data {
+protected:
+	char *author;
+	char *title;
+	float size;
+public:
+	Book () {
+        size=120.75;
+		author = new char[12];
+		strcpy(author, "Jack London");
+        title = new char[21];
+		strcpy(title, "The Call of the Wild");
+}
+	Book (int yr, int mth, int dy, float sz, char* auth, char* ttl): Data (yr, mth, dy) {
+		size=sz;
+        author = new char[strlen(auth)+1];
+		strcpy (author, auth);
+		title = new char[strlen(ttl)+1];
+		strcpy (title, ttl);
+}
+    Book& operator = (const Book &obj) {
+	  int i;
+	    if (this==&obj) return *this;
+		year=obj.year;
+		month=obj.month;
+		day=obj.day;
+		size=obj.size;
+		delete [] author;
+		author = new char[strlen(obj.author)+1];
+		strcpy(author, obj.author);
+        delete [] title;
+		title = new char[strlen(obj.title)+1];
+		strcpy(title, obj.title);
+	    return *this;
+}
+	char* get_author () {return author;}
+	char* get_title () {return title;}
+	float get_size () {return size;}
+};
+class Person: public Data {
+protected:
+	char *surname;
+	char *name;
+public:
+	Person () {
+        name = new char[5];
+		strcpy(name, "Ivan");
+        surname = new char[9];
+        strcpy(surname, "Ivanenko");
+}
+	Person (int yr, int mth, int dy, char* srnm, char* nm): Data (yr, mth, dy) {
+		surname = new char [strlen(srnm)+1];
+		strcpy (surname, srnm);
+		name = new char [strlen(nm)+1];
+		strcpy (name, nm);
+}
+	char* get_surname () {return surname;}
+	char* get_name () {return name;}
+};
+class Student: public Person {
+protected:
+	int course, n_books;
+	Book *books;
+public:
+	Student () {
+    course=1;
+	n_books=2;
+    books = new Book [n_books];
+}
+	Student (int yr, int mth, int dy, char* srnm, char* nm, int crs, int n_bk, Book* bks): Person (yr, mth, dy, srnm, nm) {
+	int i;
+    course=crs;
+    n_books=n_bk;
+	books=new Book [n_bk];
+	for (i=0;i<n_bk;i++)
+		books[i]=bks[i];
+	}
+    Student& operator = (const Student &obj) {
+	  int i;
+	    if (this==&obj) return *this;
+		year=obj.year;
+		month=obj.month;
+		day=obj.day;
+		course=obj.course;
+		n_books=obj.n_books;
+		delete [] surname;
+		surname = new char[strlen(obj.surname)+1];
+		strcpy(surname, obj.surname);
+        delete [] name;
+		name = new char[strlen(obj.name)+1];
+		strcpy(name, obj.name);
+		delete [] books;
+        books = new Book [n_books];
+		for(i=0;i<n_books;i++)
+			books[i]=obj.books[i];
+	    return *this;
+}
+	int get_course () {return course;}
+	int get_n_books () {return n_books;}
+	Book* get_books () {return books;}
+};
+class Group {
+	char *group_name;
+	int n_students;
+    Student *students;
+public:
+	char* get_group_name () {return group_name;}
+	int get_n_students () {return n_students;}
+	Student* get_students () {return students;}
+	Group () {
+		group_name=new char[5];
+        strcpy (group_name,"NN01");
+		n_students=3;
+		students = new Student [n_students];
+}
+	Group (char* gr_nm, int n_std, Student* stds) {
+	   int i;
+       group_name=new char[strlen(gr_nm)+1];
+	   strcpy (group_name, gr_nm);
+	   n_students=n_std;
+	   students=new Student [n_std];
+	   for (i=0; i<n_std; i++)
+		   students[i]=stds[i];
+}
+	~Group () {
+		delete [] students;
+}
+    Group& operator = (const Group &obj) {
+	  int i;
+	    if (this==&obj) return *this;
+		n_students=obj.n_students;
+		delete [] group_name;
+		group_name = new char[strlen(obj.group_name)+1];
+		strcpy(group_name, obj.group_name);
+        students = new Student [n_students];
+		for(i=0;i<n_students;i++)
+			students[i]=obj.students[i];
+	    return *this;
+}
+     friend	ostream& operator << (ostream& ost, Group& obj) {
+		int i, j;
+		ost << "Group: " << obj.group_name << endl << endl;
+	    for(i=0; i<obj.n_students; i++) {
+			ost << "Student # " << i+1 << endl;
+            ost << "Surname: " << obj.students[i].get_surname() << endl;
+			ost << "Name: " << obj.students[i].get_name() << endl;
+			ost << "Course: " << obj.students[i].get_course() << endl;
+			ost << "Year of birth: " << obj.students[i].get_year() << endl; 
+            ost << "Month of birth: " << obj.students[i].get_month() << endl;
+            ost << "Day of birth: " << obj.students[i].get_day() << endl;
+			ost << "Books: " <<endl;
+			for(j=0; j<obj.students[i].get_n_books(); j++) {
+				ost << "Book # " << j+1 << endl;
+				ost << "Author: " << obj.students[i].get_books()[j].get_author() << endl;
+				ost << "Title: " << obj.students[i].get_books()[j].get_title() << endl;
+				ost << "Size: " << obj.students[i].get_books()[j].get_size() << endl;
+                ost << "Year of receipt: " << obj.students[i].get_books()[j].get_year() << endl; 
+                ost << "Month of receipt: " << obj.students[i].get_books()[j].get_month() << endl;
+                ost << "Day of receipt: " << obj.students[i].get_books()[j].get_day() << endl;
+			}
+			ost << endl;
+	    }
+	return ost;
+}
+};
+
+Group* inc_n (Group* arr, int* n, int x) {
+	int i;
+    Group *new_arr;
+	new_arr = new Group [*n+x];
+	for(i=0;i<*n;i++)
+		new_arr[i]=arr[i];
+	delete [] arr;
+	*n+=x;
+	return new_arr;
+}
+Group* dec_n (Group* arr, int* n, int x) {
+	int i;
+	Group *new_arr;
+	new_arr = new Group [*n-x];
+	for(i=0;i<*n-x;i++) 
+		new_arr[i]=arr[i];
+	delete [] arr;
+	*n-=x;
+	return new_arr;
+}
+template <typename T1>
+T1 amount(T1 * arr, int n){ 
+  T1 count=0;
+  int i;
+  for (i=0; i<n; i++)
+      count+=arr[i];
+  return count;
+}
+   template <class Type>
+   struct link {
+	   Type data;
+	   link *next;
+   };
+
+   template <class Type>
+   class LinkedList {
+	   link <Type> *first;
+   public:
+	   LinkedList () {
+		   first=null;
+	   }
+	   void Additem (Type d) {
+		   link <Type> *newlink = new link <Type>;
+		   newlink->data=d;
+		   newlink->next=first;
+	   }
+	   void display () {
+            link <Type> *current = first;
+			while (current!=null) {
+				cout<<endl<<current->data;
+				current=current->next;
+			}
+	   }
+   };
+void out_file(Group *arr, int n) {
+	ofstream file;
+	int i, flag;
+	char* file_path;
+	file_path = new char [255];
+    do {
+    	cout << "\nEnter file path: "; 
+		do {
+			cin >> file_path;
+			if (strlen(file_path)>255) {
+				flag=0;
+
+				cout << "\nToo long file path! Please, input shorter one";
+			}
+			else flag=1;
+		}  while (flag==0); 
+		file.open(file_path, std::ios::out);
+	} while (!file.is_open());
+	if (file.is_open()) {
+		for (i=0;i<n;i++) {
+			 file << arr[i];
+		}
+	}
+	file.close();
+}
+ 
+int main() {
+	Group *pt, *pt_file;
+    int n, flag=1,i,j,k,l, count_books, *arr_books;
+	float count_size, *arr_size;
+	char *str, *buf;
+	LinkedList <Book> Books_list;
+	LinkedList <Student> Students_list;
+	arr_books = new int [100];
+	arr_size = new float [100];
+	
+	while(flag)
+	{
+      printf("Input n (number of groups) <100:\n"); 
+	  str=new char[3];
+	  buf=new char[10000];
+	  
+          do {
+             scanf("%s",buf);
+	         if (strlen(buf)>3) {
+		       flag=0;
+		       printf("Number is too large! Please, input shorter one \n");
+	         }
+	     else flag=1;
+	     } while(flag==0);
+      flag=0;
+	  strcpy(str,buf);
+	  for(i=0;i<strlen(str);i++)
+		  if (!(isdigit(str[i]))) flag=1;
+	  if (flag==0) {
+		  n=atoi(str);
+     	  if ((n>99)||(n<0)) 
+	    	  flag=1;
+	  }
+	  if (flag==1) printf("Number isnt correct. Try again!\n");
+	  
+	}
+    pt = new Group [n];
+	pt = inc_n (pt, &n, 2);
+	pt = dec_n (pt, &n, 1);
+	for(i=0;i<n;i++)
+		cout<<pt[i];
+	pt_file = new Group [10];
+    
+	Book *bks_1;
+	bks_1 = new Book [1];
+	Book bk_1 (2006, 11, 17, 234, "Abraham Lincoln", "Opus Magnum");
+    bks_1[0]=bk_1;
+	Book *bks_2;
+	bks_2 = new Book [2];
+    bks_2[0]=bk_1;
+	Book bk_2 (2007, 12, 18, 124, "Jules Cont", "Positivismus");
+	bks_2[1]=bk_2;
+	Student *stds;
+	stds = new Student [2];
+	Student std_1 (1990, 2, 12, "Koval", "Andriy", 2, 1, bks_1);
+	stds[0]=std_1;
+	Student std_2 (1991, 1, 26, "Bera", "Semen", 1, 2, bks_2);
+	stds[1]=std_2;
+    Group Group_1 ("AB-02",2,stds);
+    cout<<Group_1<<endl;
+	
+    //out_file (pt_file, 10);
+	k=0;
+	for(i=0;i<n;i++)
+		for (j=0;j<pt->get_n_students();j++) {
+			arr_books[k]=pt->get_students()[j].get_n_books();
+			k++;
+		}
+    printf("Amount of books: %d\n",amount(arr_books, k));
+	k=0;
+    for(i=0;i<n;i++)
+		for (j=0;j<pt->get_n_students();j++)
+			for (l=0;l<pt->get_students()[j].get_n_books();l++) {
+            arr_size[k]=pt->get_students()[j].get_books()[l].get_size();
+			k++;
+		}
+    printf("Total size of books: %4.3f\n",amount(arr_size, k));
+    
+	getch();
+	return 0;
+}
+ 
