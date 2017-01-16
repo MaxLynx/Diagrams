@@ -1,0 +1,56 @@
+from math import sin
+import pylab
+from matplotlib import mlab
+N=5
+X = [(1+0.4*i) for i in range(N+1)]
+Y = [0 for i in range(N+1)]
+for i in range(N+1):
+    Y [i] = X[i]*X[i]+sin(X[i])
+    print('   X = %+4.3f' %X[i],'   Y = %+4.3f' %Y[i],' ')
+
+def func1(x):
+    return x*x+sin(x)
+def func2(x):
+    f0 = Y[0]*(x-X[1])*(x-X[2])*(x-X[3])*(x-X[4])*(x-X[5])/((X[0]-X[1])*(X[0]-X[2])*(X[0]-X[3])*(X[0]-X[4])*(X[0]-X[5]))
+    f1 = Y[1]*(x-X[0])*(x-X[2])*(x-X[3])*(x-X[4])*(x-X[5])/((X[1]-X[0])*(X[1]-X[2])*(X[1]-X[3])*(X[1]-X[4])*(X[1]-X[5]))
+    f2 = Y[2]*(x-X[1])*(x-X[0])*(x-X[3])*(x-X[4])*(x-X[5])/((X[2]-X[1])*(X[2]-X[0])*(X[2]-X[3])*(X[2]-X[4])*(X[2]-X[5]))
+    f3 = Y[3]*(x-X[1])*(x-X[2])*(x-X[0])*(x-X[4])*(x-X[5])/((X[3]-X[1])*(X[3]-X[2])*(X[3]-X[0])*(X[3]-X[4])*(X[3]-X[5]))
+    f4 = Y[4]*(x-X[1])*(x-X[2])*(x-X[3])*(x-X[0])*(x-X[5])/((X[4]-X[1])*(X[4]-X[2])*(X[4]-X[3])*(X[4]-X[0])*(X[4]-X[5]))
+    f5 = Y[5]*(x-X[1])*(x-X[2])*(x-X[3])*(x-X[4])*(x-X[0])/((X[5]-X[1])*(X[5]-X[2])*(X[5]-X[3])*(X[5]-X[4])*(X[5]-X[0]))
+    return f0+f1+f2+f3+f4+f5
+xmin=0.6
+xmax=3.4
+dx=0.1
+xlist = mlab.frange (xmin, xmax, dx)
+ylist1 = [func1 (x) for x in xlist]
+ylist2 = [func2 (x) for x in xlist]
+pylab.grid(True)
+pylab.plot (xlist, ylist1)
+pylab.plot (xlist, ylist2)
+pylab.savefig('Lab2_1.png')
+pylab.show()
+
+xh=0.6
+while (xh<=3.5):
+     f0 = Y[0]*(xh-X[1])*(xh-X[2])*(xh-X[3])*(xh-X[4])*(xh-X[5])/((X[0]-X[1])*(X[0]-X[2])*(X[0]-X[3])*(X[0]-X[4])*(X[0]-X[5]))
+     f1 = Y[1]*(xh-X[0])*(xh-X[2])*(xh-X[3])*(xh-X[4])*(xh-X[5])/((X[1]-X[0])*(X[1]-X[2])*(X[1]-X[3])*(X[1]-X[4])*(X[1]-X[5]))
+     f2 = Y[2]*(xh-X[1])*(xh-X[0])*(xh-X[3])*(xh-X[4])*(xh-X[5])/((X[2]-X[1])*(X[2]-X[0])*(X[2]-X[3])*(X[2]-X[4])*(X[2]-X[5]))
+     f3 = Y[3]*(xh-X[1])*(xh-X[2])*(xh-X[0])*(xh-X[4])*(xh-X[5])/((X[3]-X[1])*(X[3]-X[2])*(X[3]-X[0])*(X[3]-X[4])*(X[3]-X[5]))
+     f4 = Y[4]*(xh-X[1])*(xh-X[2])*(xh-X[3])*(xh-X[0])*(xh-X[5])/((X[4]-X[1])*(X[4]-X[2])*(X[4]-X[3])*(X[4]-X[0])*(X[4]-X[5]))
+     f5 = Y[5]*(xh-X[1])*(xh-X[2])*(xh-X[3])*(xh-X[4])*(xh-X[0])/((X[5]-X[1])*(X[5]-X[2])*(X[5]-X[3])*(X[5]-X[4])*(X[5]-X[0]))
+     yh=xh*xh+sin(xh)
+     f=f0+f1+f2+f3+f4+f5
+     print(' x =%+1.1f ' %xh,'  f(x) =%+2.5f ' %yh,'    φ(x)=%+2.5f ' %f,'   Абсолютная погрешность:%+2.5f' %(yh-f),'   Относительная погрешность:%+2.5f' %(100*(yh-f)/yh))
+     xh=xh+0.1
+'''print('Дополнительное задание: ')
+x1=5
+x2=20
+y1=x1*x1+sin(x1)
+y2=x2*x2+sin(x2)
+xh=x1
+while (xh<=(x2+1)):
+    f=y1*(xh-x2)/(x1-x2)+y2*(xh-x1)/(x2-x1)
+    yh=xh*xh+sin(xh)
+    print(' x =%+1.1f ' %xh,'  f(x) =%+2.5f ' %yh,'    φ(x)=%+2.5f ' %f,'   Абсолютная погрешность:%+2.5f' %(yh-f),'   Относительная погрешность:%+2.5f' %(100*(yh-f)/yh)) 
+    xh=xh+5'''
+     
