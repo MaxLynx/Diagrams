@@ -1,0 +1,74 @@
+domains
+      person=symbol
+predicates
+      male(person)
+      female(person)
+      parents(person,person,person)
+      granny(person,person)
+clauses
+      male("James I").
+      male("Henry Frederick").
+      male("Frederick V").
+      male("Charles I").
+      male("Charles I Louis").
+      male("Prince Rupert").
+      male("Edward").
+      male("Ernest Augustus").
+      male("Charles II").
+      male("William II").
+      male("James II").
+      male("Philippe I").
+      male("George I").
+      male("William III").
+      male("James Francis Edward").
+      male("Charles Edward").
+      female("Anne of Denmark").
+      female("Elizabeth of Scotland").
+      female("Henrietta Maria").
+      female("Elisabeth of the Palatinate").
+      female("Louise Hollandine").
+      female("Henriette Marie").
+      female("Sophia of Hanover").
+      female("Mary of Orange").
+      female("Anne Hyde").
+      female("Mary of Modena").
+      female("Henrietta of England").
+      female("Mary II").
+      female("Anne of GB").
+      female("Maria Clementina"). 
+      parents("James I", "Anne of Denmark", "Henry Frederick").
+      parents("James I", "Anne of Denmark","Elizabeth of Scotland").
+      parents("James I", "Anne of Denmark", "Charles I").
+      parents("Elizabeth of Scotland", "Frederick V", "Charles I Louis").
+      parents("Elizabeth of Scotland", "Frederick V", "Elisabeth of the Palatinate").
+      parents("Elizabeth of Scotland", "Frederick V", "Prince Rupert").
+      parents("Elizabeth of Scotland", "Frederick V", "Louise Hollandine").
+      parents("Elizabeth of Scotland", "Frederick V", "Edward").
+      parents("Elizabeth of Scotland", "Frederick V", "Henriette Marie").
+      parents("Elizabeth of Scotland", "Frederick V", "Sophia of Hanover").
+      parents("Sophia of Hanover", "Ernest Augustus", "George I").
+      parents("Charles I", "Henrietta Maria", "Henrietta").
+      parents("Charles I", "Henrietta Maria", "James II").
+      parents("Charles I", "Henrietta Maria", "Mary of Orange").
+      parents("Charles I", "Henrietta Maria", "Charles II").
+      parents("Mary of Orange", "William II", "William III").
+      parents("Anne Hyde", "James II", "Mary II").
+      parents("Anne Hyde", "James II", "Anne of GB").
+      parents("James II", "Mary of Modena", "James Francis Edward").
+      parents("James Francis Edward", "Maria Clementina", "Charles Edward").      
+      granny(X,Y) if
+        female(X) and
+        parents(X,Z,P) and
+        parents(P,F,Y).
+      granny(X,Y) if  
+        female(X) and
+        parents(Z,X,P) and
+        parents(P,F,Y).
+      granny(X,Y) if
+        female(X) and
+        parents(X,Z,P) and
+        parents(F,P,Y).
+      granny(X,Y) if
+        female(X) and     
+        parents(Z,X,P) and
+        parents(F,P,Y).
