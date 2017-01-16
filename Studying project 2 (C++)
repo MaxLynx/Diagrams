@@ -1,0 +1,430 @@
+#include <iostream>
+#include <cstdlib>
+#include <stdio.h>
+#include <conio.h>
+#include <string>
+
+class Firm {
+	char *name;
+	int year_founding;
+	float fund;
+	int year_partnership;
+	char *contact_surname, *contact_name;
+	long int contact_number;
+public:
+    Firm(); 
+	Firm (char *nm, char *c_s, char *c_n, int y_f, int y_p, int c_nb, double fn); 
+	Firm (const Firm &obj); 
+    Firm& operator = (const Firm &obj);
+	~Firm();
+    void set_name ();
+    void set_year_founding ();
+	void set_fund ();
+    void set_year_partnership ();
+    void set_contact_surname ();
+    void set_contact_name ();
+    void set_contact_number ();
+	void get_name();
+	void get_year_founding ();
+	void get_fund ();
+	void get_year_partnership ();
+	void get_contact_surname ();
+	void get_contact_name ();
+	void get_contact_number ();
+    void inc_year_founding (int x);
+	void inc_fund (double x);
+    void inc_year_partnership (int x);
+    void dec_year_founding (int x);
+	void dec_fund (double x);
+	void dec_year_partnership (int x);
+};
+
+
+
+Firm::Firm() {
+      name = new char [5];
+	  strcpy(name,"Firm");
+	  year_founding=2000;
+	  fund=0;
+	  year_partnership=2001;
+	  contact_surname = new char [7];
+	  strcpy(contact_surname,"Person");
+	  contact_name = new char [7];
+	  strcpy(contact_name,"Person");
+	  contact_number=0;
+      printf("Default constructor was called\n");
+	}
+Firm::Firm (char *nm, char *c_s, char *c_n, int y_f, int y_p, int c_nb, double fn) {
+		name = new char[strlen(nm)+1];
+		strcpy (name, nm);
+		year_founding=y_f;
+		fund=fn;
+		year_partnership=y_p;
+		contact_surname = new char[strlen(c_s)+1];
+		strcpy(contact_surname,c_s);
+		contact_name = new char [strlen(c_n)+1];
+		strcpy(contact_name, c_n);
+		contact_number=c_nb;
+        printf("Parameterized constructor was called\n");
+	}
+Firm::Firm (const Firm &obj) {
+        name = new char[strlen(obj.name)+1];
+		strcpy (name, obj.name);
+		year_founding=obj.year_founding;
+		fund=obj.fund;
+		year_partnership=obj.year_partnership;
+		contact_surname = new char[strlen(obj.contact_surname)+1];
+		strcpy(contact_surname,obj.contact_surname);
+		contact_name = new char [strlen(obj.contact_name)+1];
+		strcpy(contact_name, obj.contact_name);
+		contact_number=obj.contact_number;
+        printf("Copy constructor was called\n");
+	}
+Firm& Firm::operator = (const Firm &obj) {
+	    if (this==&obj) return *this;
+	    delete [] name;
+        name = new char[strlen(obj.name)+1];
+		strcpy (name, obj.name);
+		year_founding=obj.year_founding;
+		fund=obj.fund;
+		year_partnership=obj.year_partnership;
+		delete [] contact_surname;
+		contact_surname = new char[strlen(obj.contact_surname)+1];
+		strcpy(contact_surname,obj.contact_surname);
+		delete [] contact_name;
+		contact_name = new char [strlen(obj.contact_name)+1];
+		strcpy(contact_name, obj.contact_name);
+		contact_number=obj.contact_number;
+		return *this;
+}
+Firm::~Firm() {
+		delete [] name;
+		delete [] contact_surname;
+		delete [] contact_name;
+        printf("Destructor was called\n");
+	}
+void Firm::set_name() {
+	char* buf;
+	int flag;
+	printf("Input name of your firm:  <11 signs\n"); 
+    name = new char [10];
+    buf=new char[10000];
+	do {
+       scanf("%s",buf);
+	    if (strlen(buf)>10) {
+		flag=0;
+		printf("Name is too long! >10 symbols Please, input shorter one \n");
+     	}
+	    else flag=1;
+	   } while(flag==0);
+	strcpy(name,buf);
+}
+void Firm::set_year_founding() {
+	int val, flag=1,i;
+	char *str, *buf;
+	while(flag)
+	{
+      printf("Input year of founding of the firm:   <7 symbols\n"); 
+	  str=new char[6];
+      buf=new char[10000];
+      do {
+       scanf("%s",buf);
+	    if (strlen(buf)>6) {
+		flag=0;
+		printf("Value is enormous! >6 symbols Please, input shorter one \n");
+     	}
+	    else flag=1;
+	   } while(flag==0);
+	  flag=0;
+	  strcpy(str, buf);
+	  for(i=0;i<strlen(str);i++)
+		  if (!(isdigit(str[i]))) flag=1;
+	  if (flag==0) {
+		  val=atoi(str);
+     	  if (val<0) 
+	    	  flag=1;
+	  }
+	  if (flag==1) printf("Year isnt correct. Try again!\n");
+	  
+	}
+	year_founding=val;
+}
+void Firm::set_fund() {
+	int val, flag=1,i, count_points=0;
+	char *str, *buf;
+	while(flag)
+	{
+      printf("Input fund of the firm:   <16 symbols\n"); 
+	  str=new char[15];
+	  buf = new char [10000];
+	  count_points=0;
+      do {
+       scanf("%s",buf);
+	    if (strlen(buf)>16) {
+		flag=0;
+		printf("Value is enormous! >15 symbols Please, input shorter one \n");
+     	}
+	    else flag=1;
+	   } while(flag==0);
+	  strcpy (str, buf);
+	  flag=0;
+	  for(i=0;i<strlen(str);i++)
+	  {
+		  if (!(isdigit(str[i]))) flag=1;
+		  if ((count_points!=1)&&(str[i]=='.')) {
+			  flag=0;
+			  count_points=1;
+		  }
+	  }
+	  if (flag==0) {
+		  val=atof(str);
+     	  if (val<0) 
+	    	  flag=1;
+	  }
+	  if (flag==1) printf("Number isnt correct. Try again!\n");
+	  
+	}
+	fund=val;
+}
+void Firm::set_year_partnership() {
+	int val, flag=1,i;
+	char *str, *buf;
+	while(flag)
+	{ 
+	  printf("Input year of partnership with this firm:   <7 symbols\n");
+	  str=new char[6];
+	  buf=new char[10000];
+      do {
+       scanf("%s",buf);
+	    if (strlen(buf)>6) {
+		flag=0;
+		printf("Value is enormous! >6 symbols Please, input shorter one \n");
+     	}
+	    else flag=1;
+	   } while(flag==0);
+	  strcpy(str,buf);
+	  flag=0;
+	  for(i=0;i<strlen(str);i++)
+		  if (!(isdigit(str[i]))) flag=1;
+	  if (flag==0) {
+		  val=atoi(str);
+     	  if (val<year_founding) 
+	    	  flag=1;
+	  }
+	  if (flag==1) printf("Year isnt correct. Try again!\n");
+	}
+	year_partnership=val;
+}
+void Firm::set_contact_name() {
+	int flag=1,i;
+	char* buf;
+	while(flag) {
+	printf("Input name of the contact person:   <11 letters\n"); 
+    contact_name = new char [10];
+	buf = new char [10000];
+	do {
+    scanf("%s",buf);
+	if (strlen(buf)>10) {
+		flag=0;
+		printf("Name is too long! >10 symbols Please, input shorter one \n");
+	}
+	else flag=1;
+	} while(flag==0);
+	strcpy(contact_name, buf);
+	flag=0;
+	for(i=0;i<strlen(contact_name);i++)
+		if(!(isalpha(contact_name[i]))&&(contact_name[i]!='-')) flag=1;
+    if (flag==1) printf("Name isnt correct. Try again!\n");
+	}
+}
+void Firm::set_contact_surname() {
+	int flag=1,i;
+	char* buf;
+	while(flag) {
+	printf("Input surname of the contact person:   <11 letters\n"); 
+    contact_surname = new char [10];
+	buf = new char[10000];
+    do {
+    scanf("%s",buf);
+	if (strlen(buf)>10) {
+		flag=0;
+		printf("Surname is too long! >10 symbols Please, input shorter one \n");
+	}
+	else flag=1;
+	} while(flag==0);
+	strcpy(contact_surname, buf);
+	flag=0;
+	for(i=0;i<strlen(contact_surname);i++)
+		if(!(isalpha(contact_surname[i]))&&(contact_surname[i]!='-')) flag=1;
+    if (flag==1) printf("Sername isnt correct. Try again!\n");
+	}
+}
+void Firm::set_contact_number() {
+	int flag=1, i;
+	char *str, *buf;
+	while(flag){
+      str=new char[10];
+	  buf=new char[10000];
+	  printf("Input telephone number of the contact person:\n");
+	  do {
+    scanf("%s",buf);
+	if (strlen(buf)>10) {
+		flag=0;
+		printf("Number is too long! >10 symbols Please, input shorter one \n");
+	}
+	else flag=1;
+	} while(flag==0);
+	  strcpy(str,buf);
+	  flag=0;
+	  for (i=0;i<strlen(str);i++)
+		  if (!(isdigit(str[i]))) flag=1;
+    if (flag==1) printf("Number isnt correct. Try again!\n");
+	}
+  contact_number=atoi(str);
+}
+void Firm::get_name() {
+	 char c=0xBA;
+	 printf("%c %10s ",c,name);
+}
+void Firm::get_year_founding () {
+	 char c=0xBA;
+     printf("%c%6d",c,year_founding);
+}
+void Firm::get_fund () {
+	 char c=0xBA;
+     printf("%c%11.3f ",c,fund); 
+}
+void Firm::get_year_partnership () {
+     char c=0xBA;
+     printf("%c%6d",c,year_partnership);
+}
+void Firm::get_contact_surname () {
+	 char c=0xBA;
+     printf("%c %10s ",c,contact_surname);
+}
+void Firm::get_contact_name () {
+	 char c=0xBA;
+     printf("%c %10s ",c,contact_name); 
+}
+void Firm::get_contact_number () {
+	 char c=0xBA;
+     printf("%c %10d %c",c,contact_number,c);
+}
+void Firm::inc_year_founding (int x) {
+     year_founding+=x;
+}
+void Firm::inc_fund (double x) {
+     fund+=x;
+}
+void Firm::inc_year_partnership (int x) {
+     year_partnership+=x;
+}
+void Firm::dec_year_founding (int x) {
+	 year_founding-=x;
+}
+void Firm::dec_fund (double x) {
+	 fund-=x;
+}
+void Firm::dec_year_partnership (int x) {
+	 year_partnership-=x;
+}
+
+
+
+Firm Firm_Global;
+Firm Firm_Global2 ("Firm_X", "Petrenko", "Petro", 1999, 2000, 123456, 40);
+Firm Firm_Global3 (Firm_Global2);
+
+void Create (Firm *list, int *n) {
+	int i;
+               system("cls");
+			   i=*n;
+			   list[i].set_name();
+               list[i].set_year_founding();
+               list[i].set_fund();
+               list[i].set_year_partnership();
+               list[i].set_contact_name();
+               list[i].set_contact_surname();
+		       list[i].set_contact_number();
+               *n=i+1;
+	           system("cls");
+}
+void Print (Firm *list, int n) {
+    char c1=0xCC, c2=0xCE, c3=0xB9, c4=0xCD, c5=0xBB, c6=0xC9, c7=0xCB, c8=0xCA, c9=0xC8, c10=0xBC, c11=0xBA;
+	char* s;
+	int i;
+    s = new char[6];
+	strcpy(s,"??????");
+    for(i=0;i<6;i++)
+	     	s[i]=c4;
+          system("cls");
+          printf("\n\n%c%s%s%c%s%c%s%s%c%s%c%s%s%c%s%s%c%s%s%c",c6,s,s,c7,s,c7,s,s,c7,s,c7,s,s,c7,s,s,c7,s,s,c5);
+	      printf("%c",c11);
+		  printf("  Firm name ");
+          printf("%c",c11);
+          printf("Year_f");
+          printf("%c",c11);
+          printf("    Fund    ");
+          printf("%c",c11);
+          printf("Year_p");
+          printf("%c",c11);
+		  printf("Contact Name");
+          printf("%c",c11);
+          printf("     Surname");
+          printf("%c",c11);
+          printf("     Number ");
+          printf("%c",c11);
+		  for(i=0;i<n;i++) {
+				 printf("%c%s%s%c%s%c%s%s%c%s%c%s%s%c%s%s%c%s%s%c",c1,s,s,c2,s,c2,s,s,c2,s,c2,s,s,c2,s,s,c2,s,s,c3);
+				 list[i].get_name();
+	             list[i].get_year_founding ();
+	             list[i].get_fund ();
+	             list[i].get_year_partnership ();
+	             list[i].get_contact_name ();
+	             list[i].get_contact_surname ();
+				 list[i].get_contact_number ();
+			   }
+         printf("%c%s%s%c%s%c%s%s%c%s%c%s%s%c%s%s%c%s%s%c\n",c9,s,s,c8,s,c8,s,s,c8,s,c8,s,s,c8,s,s,c8,s,s,c10);
+         printf("\nPress any key \n"); 
+		 getch();
+	     system("cls");
+}
+void Example() {
+    Firm Firm_1 ("Firm_1", "Ivanenko", "Ivan", 1998, 2015, 123456, 400.76);
+	Firm Firm_2=Firm_1;
+}
+int main() 
+{
+	int exit=1, list_n=0, i, max_n=4;
+    Firm *list=new Firm[4];
+	Example();
+	Firm Firm_3 ("Firm_3", "Petrenko", "Petro", 1999, 2005, 767685, 23000.04);
+	Firm Firm_4=Firm_3;
+	Firm Firm_5=Firm_3;
+	Firm_4.dec_fund(20000.76);
+	Firm_4.dec_year_founding(4);
+	Firm_4.dec_year_partnership(2);
+	Firm_5.inc_fund(1000);
+	Firm_5.inc_year_founding(6);
+	Firm_5.inc_year_partnership(10);
+	list[1]=Firm_3;
+	list[2]=Firm_4;
+	list[3]=Firm_5;
+	while (exit!=0)
+	   {
+		   printf("\n\nPress 1 to create a new record\n");
+		   printf("Press 2 to view records\n");
+           printf("Press ESC for exit\n");
+		   char c=getch();
+		   if(c==49)         //Нажата клавиша "1"
+			     Create (list, &list_n);
+		   if(c==50)         //Нажата клавиша "2" 
+		         Print(list, max_n);
+		   if(c==27) exit=0; //Нажата клавиша "Esc"
+		   else system("cls");
+	   }
+	system ("cls");
+	for(i=0;i<max_n;i++) 
+		list[i].~Firm();
+	return 0; 
+}  
