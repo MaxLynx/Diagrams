@@ -1,0 +1,210 @@
+#include <stdio.h> // Лабораторна робота №1
+#include <math.h>
+#include <cstdlib>
+struct str{                                                       // Опис структури
+  str (double a0, double b0, double x1_0, double x2_0, double dx0) 
+   {
+	   a=a0; b=b0; x1=x1_0; x2=x2_0; dx=dx0;
+   }
+
+  double a, b, x1, x2, dx;
+  double *pt;
+  };
+
+double* calculate(double x1, double x2, double a, double b, double dx, int *count) { // Обчислення значень функції
+    double x=x1; 
+	char c=0xCD, c2=0xBA, c3=0xCE, c4=0xCB, c5=0xCA;
+    int i=0,j;
+	double *arr;
+	arr = new double [int((x2-x1)/dx+2)];
+      for(j=0; j<=3;j++)
+		  printf("%c",c);
+      printf("%c",c4);
+      for(j=4; j<=18;j++)
+		  printf("%c",c);
+      printf("%c",c4);
+      for(j=19; j<=28;j++)
+		  printf("%c",c);
+      printf("\n  N %c       x       %c    f(x)\n", c2, c2);
+      for(j=0; j<=3;j++)
+		  printf("%c",c);
+      printf("%c",c3);
+      for(j=4; j<=18;j++)
+		  printf("%c",c);
+      printf("%c",c3);
+      for(j=19; j<=28;j++)
+		  printf("%c",c);
+	  printf("\n");
+    while(x<x2+dx)
+     {
+      if(x>1) {
+	       arr[i]=-1*a*x*x+b;
+	       i++;
+	       printf(" %2d %c     %1.5lf   %c   %3.3lf\n",i,c2,x,c2,arr[i-1]);
+		   if(x<x2)
+		   {
+	            for(j=0; j<=3;j++)
+		            printf("%c",c);
+                printf("%c",c3);
+                for(j=4; j<=18;j++)
+		            printf("%c",c);
+                printf("%c",c3);
+                for(j=19; j<=28;j++)
+		            printf("%c",c);
+	            printf("\n");
+	      }
+		   else
+		   {
+                for(j=0; j<=3;j++)
+		            printf("%c",c);
+                printf("%c",c5);
+                for(j=4; j<=18;j++)
+		            printf("%c",c);
+                printf("%c",c5);
+                for(j=19; j<=28;j++)
+		            printf("%c",c);
+	            printf("\n");
+		   }
+	    }
+       else if(x!=0) {
+		      arr[i]=b/x;
+		      i++;
+		      printf(" %2d %c     %1.5lf   %c   %3.3lf\n",i,c2,x,c2,arr[i-1]);
+		      for(j=0; j<=3;j++)
+		        printf("%c",c);
+              printf("%c",c3);
+              for(j=4; j<=18;j++)
+		        printf("%c",c);
+              printf("%c",c3);
+              for(j=19; j<=28;j++)
+		        printf("%c",c);
+	          printf("\n");
+		   }
+
+      x+=dx;
+	   
+     }
+     *count=i; 
+	 return arr;
+  };
+ int* convert(double *old_arr, int n, double A) { // Нормування масиву
+    int *new_arr;
+	int i;
+	double max, min;
+	new_arr = new int [n];
+    max=old_arr[0];
+	min=old_arr[0];
+	for (i=1;i<n;i++)
+	  {
+		  if(old_arr[i]>max) max=old_arr[i];
+          if(old_arr[i]<min) min=old_arr[i];
+	  }
+	for(i=0;i<n;i++)
+	     new_arr[i]=((old_arr[i]-min)/(max-min))*A;
+	return new_arr;
+	}
+ double* random_arr(double *old_arr, int n) { // Створення "випадкового" масиву
+	 double s1=0, s2=0, tmp, step, delta=0.02;
+	 int i;
+	 double *rand_arr;
+	 rand_arr = new double [n];
+	 for(i=0;i<n;i+=2)
+		 s1+=old_arr[i];
+	 for(i=0;i<n;i++)
+		 if(old_arr[i]<5) s2+=old_arr[i];
+	 printf("\ns1=%2.4f\ns2=%2.4f\n",s1,s2);
+	 if(s1>s2) {  // Більший з параметрів зафіксуємо в змінній s2
+		 tmp=s1; 
+		 s1=s2; s2=tmp;
+	 }
+     step=delta*0.5*(s1+s2);
+	 printf("step=%2.8f\n",step);
+	 for(i=0;i<n;i++)
+	    rand_arr[i]=s2-abs((rand()%(int((s2-s1)/step)+1))*step);
+	 return rand_arr;
+ }
+ double* smoothy(double *old_arr, int n) {  // Згладження масиву
+	 int i;
+	 double *smoothy_arr;
+	 smoothy_arr = new double [n];
+	 smoothy_arr[0]=(old_arr[0]+old_arr[1])/2;
+	 for(i=1; i<n-1; i++)
+		 smoothy_arr[i]=(old_arr[i-1]+old_arr[i]+old_arr[i+1])/3;
+     smoothy_arr[n-1]=(old_arr[n-2]+old_arr[n-1])/2;
+	 return smoothy_arr;
+ }
+ void arr_output (int *arr, int n, double A) {   // Виведення масиву у вигляді вертикальної залежності на екран
+     int i, j;
+	 char c=0xDE;
+	 
+	 for(i=0;i<n;i++)         
+	 {
+      printf(" %2d",arr[i]);
+      
+	  for(j=0;j<arr[i];j++)
+		  printf(" ");
+	  printf("%c\n",c);
+	 }
+}
+ void arr_foutput (int *arr, int n, double A, FILE *f) {  // Виведення масиву у вигляді вертикальної залежності до файлу "Var6.txt"
+     int i,j;
+	 
+	 char c=124;
+	 
+	 for(i=0;i<n;i++)         
+	 {
+      fprintf(f," %2d",arr[i]);
+      
+	  for(j=0;j<arr[i];j++)
+		  fprintf(f," ");
+	  fprintf(f,"%c\n",c);
+	 }
+	 
+ }
+int main() {  // Головна функція
+	int i,count;
+	float A;
+	int *arr_norm, *rand_arr_norm, *smoothy_arr_norm;
+	double *rand_arr, *smoothy_arr;
+	double a_, b_, x1_, x2_, dx_;
+     FILE *f;
+	 
+//	a_=1; b_=2; x1_=0.1; x2_=3.6; dx_=0.14583;  // Значення за замовчуванням
+    printf("Input a\n");
+    scanf("%lf", &a_);
+    printf("Input b\n");
+    scanf("%lf", &b_);
+    printf("Input x1\n");
+    scanf("%lf", &x1_);
+    printf("Input x2\n");
+    scanf("%lf", &x2_);
+    printf("Input dx\n");
+    scanf("%lf", &dx_);
+    str example (a_, b_, x1_, x2_, dx_);
+    example.pt = calculate(example.x1, example.x2, example.a, example.b, example.dx, &count);
+    A=60;
+	printf("\nInput A\n");
+	scanf("%f", &A);
+	arr_norm=convert (example.pt, count, A);
+	printf("\n");
+	arr_output(arr_norm, count, A);
+    rand_arr=random_arr(example.pt, count);
+	printf("\n Random array:\n");
+    for(i=0;i<count;i++)
+		printf(" %4.6f \n",rand_arr[i]);
+	smoothy_arr=smoothy(rand_arr, count);
+    printf("\n Smoothy random array:\n");
+	for(i=0;i<count;i++)
+		printf(" %4.6f \n",smoothy_arr[i]);
+	rand_arr_norm=convert (rand_arr, count, A);
+    f=fopen("D:\\Lab1_Var6\\Var6.txt", "a");
+	fprintf(f,"Random array:\n");
+    arr_foutput(rand_arr_norm, count, A, f);
+    fclose(f);
+    smoothy_arr_norm=convert (smoothy_arr, count, A);
+    f=fopen("D:\\Lab1_Var6\\Var6.txt", "a");
+	fprintf(f,"\nSmoothy random array:\n");
+    arr_foutput(smoothy_arr_norm, count, A, f);
+    fclose(f);
+	return 0;
+};    
