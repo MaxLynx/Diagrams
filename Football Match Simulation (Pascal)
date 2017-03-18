@@ -1,0 +1,121 @@
+Program n1_4;
+  uses crt;
+  var x, y, z, a, b, i, j, error1, error2, error3:integer;
+  label l1, l2, l4, l5, l3, hell;
+begin
+   ClrScr;
+   randomize;
+   writeln('FANTASY FOOTBALL CUP QUALIFIERS');
+   WRITELN('2nd stage');
+   writeln;
+   writeln(' ENTS - SOUTHERN ELVES ');
+   readln;
+   j:=0; i:=1;    a:=0; b:=0;
+   while i<=(45+j) do begin
+   write(i,' minute.  ');
+  l1:X:=random(200);
+   case x of
+   1..15: begin writeln('Ents are penalised for a foul on Elves'); y:=random(50);
+     case y of
+       1..16: writeln('Ents misses the target');
+       17..24: writeln('Temple has an effort on goal. Saurian keeper makes a save');
+       25..26: begin writeln('GOAL FOR TEMPLE!'); b:=b+1; end;
+       27..28: begin writeln('GOAL FOR TEMPLE!'); b:=b+1; j:=j+1; end;
+       29: begin writeln('Sauria concedes a penalty, but Temple not realized it!'); j:=j+1; end;
+       30..31: begin writeln('GOAL FOR TEMPLE! They realized penalty!'); j:=j+1;
+        b:=b+1;
+        end;   end; END;
+    16..44: begin writeln('Temple is penalised for a foul on Sauria'); y:=random(50);
+     case y of
+       1..16: writeln('Sauria misses the target');
+       17..25: writeln('Sauria has an effort on goal. Temples keeper makes a save');
+       26..28: begin writeln('GOAL FOR SAURIA!'); a:=a+1; j:=j+1; end;
+       29..30: begin writeln('Temple concedes a penalty, but saurians not realized it!');  j:=j+1; end;
+       31: begin writeln('GOAL FOR SAURIA! They realized penalty!'); a:=a+1; j:=j+1; end; end; end;
+
+     45..48: writeln ('Sauria is offside');
+     54..56: writeln ('Temple is offside');
+     58..66: begin y:=random(50);
+     case y of
+       1..16: writeln('Temple misses the target');
+       17..24: writeln('Temple has an effort on goal. Saurian keeper makes a save');
+       25..28: begin writeln('GOAL FOR TEMPLE!'); b:=b+1; j:=j+1; end;
+       29..38: begin writeln('Corner for Temple');
+       goto l1;
+        end; end; end;
+
+        70..100: begin y:=random(50);
+     case y of
+       1..16: writeln('Sauria misses the target');
+       17..24: writeln('Sauria has an effort on goal. Temple keeper makes a save');
+       25..28: begin writeln('GOAL FOR SAURIANS!'); a:=a+1; j:=J+1; end;
+       29..39: begin writeln('Corner for Sauria'); goto l1; end; end; end;
+       67: begin if ((i+1) mod 5) = 0 then begin writeln('MATCH IS ABANDONED');  goto l3; end;
+        end;
+        end; if i=(45+j) then goto hell;  i:=i+1;
+   readln;           writeln;
+   end;
+  hell:
+  readln;
+   writeln;
+   writeln ('HALF-TIME');
+   writeln;
+   writeln(' SAURIA - TEMPLE OF LIGHT   ',a,' : ',b);
+   writeln;
+
+
+
+   writeln;
+    j:=0; i:=46;
+    while i<=90+j do begin
+    write(i,' minute.  ');
+  l2:X:=random(200);
+   case x of
+   1..20: begin writeln('Sauria is penalised for a foul on Temple'); y:=random(50);
+     case y of
+       1..16: writeln('Temple misses the target');
+       17..24: writeln('Temple has an effort on goal. Saurian keeper makes a save');
+       25..26: begin writeln('GOAL FOR TEMPLE!'); b:=b+1; end;
+       27..28: begin writeln('GOAL FOR TEMPLE!'); b:=b+1; j:=j+1; end;
+       29: begin writeln('Sauria concedes a penalty, but Temple not realized it!'); j:=j+1; end;
+       30..31: begin writeln('GOAL FOR TEMPLE! They realized penalty!'); j:=j+1;
+        b:=b+1;
+        end;   end; END;
+    21..43: begin writeln('Temple is penalised for a foul on Sauria'); y:=random(50);
+     case y of
+       1..16: writeln('Sauria misses the target');
+       17..24: writeln('Sauria has an effort on goal. Temples keeper makes a save');
+       25..27: begin writeln('GOAL FOR SAURIA!'); a:=a+1; j:=j+1; end;
+       29: begin writeln('Temple concedes a penalty, but saurians not realized it!');  j:=j+1; end;
+       30..31: begin writeln('GOAL FOR SAURIA! They realized penalty!'); a:=a+1; j:=j+1; end; end; end;
+
+     44..46: writeln ('Sauria is offside');
+     54..57: writeln ('Temple is offside');
+     58..69: begin y:=random(50);
+     case y of
+       1..16: writeln('Temple misses the target');
+       17..24: writeln('Temple has an effort on goal. Saurian keeper makes a save');
+       25..28: begin writeln('GOAL FOR TEMPLE!'); b:=b+1; j:=j+1; end;
+       29..38: begin writeln('Corner for Temple');
+       goto l2;
+        end; end; end;
+        70..94: begin y:=random(50);
+     case y of
+       1..16: writeln('Sauria misses the target');
+       17..24: writeln('Sauria has an effort on goal. Temple keeper makes a save');
+       25..27: begin writeln('GOAL FOR SAURIANS!'); a:=a+1; j:=J+1; end;
+       29..40: begin writeln('Corner for Sauria'); goto l2; end; end; end;
+       95: if ((i+1) mod 5) = 0 then begin writeln('MATCH IS ABANDONED'); goto l3;
+        end;
+        end;  if i=(90+j) then goto l3; inc(i);
+   readln;           writeln;  end;
+   writeln;
+   readln;
+   writeln ('FULL-TIME');
+
+   l3:writeln;
+   writeln(' SAURIA - TEMPLE OF LIGHT   ',a,' : ',b);
+
+
+   readln;
+end.
